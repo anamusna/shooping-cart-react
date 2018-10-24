@@ -1,0 +1,42 @@
+.Nav {
+    margin: 0;
+    padding: 10px;
+    border-bottom: 2px solid lightgrey;
+    display: flex;
+    justify-content: space-between;
+  }
+  .Nav ul {
+    padding: 0;
+    margin: 0;
+  }
+  .Nav__item {
+    list-style: none;
+    display: inline-block;
+    margin-right: 32px;
+    font-size: 24px;
+    border-bottom: 4px solid transparent;
+  }
+  .Nav__item a {
+    cursor: pointer;
+  }
+  .Nav__item a:hover {
+    color: #999;
+  }
+  .Nav__item.selected {
+    border-bottom-color: darkred;
+  }
+  .Nav__cart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+  }
+  
+  .Nav__cart i {
+    margin-right: 0.5rem;
+  }
+  
+  .Nav__cart:hover {
+    cursor: pointer;
+  }
+  
