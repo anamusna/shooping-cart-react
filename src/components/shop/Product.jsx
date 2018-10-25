@@ -24,7 +24,11 @@ class Product extends React.Component {
         <div className="container">
           <table>
             <tbody>
-              <td><Avatar><img src="/avatar.png" alt="avatar" /></Avatar></td>
+              <td>
+                <Avatar>
+                  <img src={this.props.src} />
+                </Avatar>
+              </td>
               <td width="100%">{this.props.product.title}</td>
               <td style={{whiteSpace: 'nowrap'}}>
                 {this.props.product.currency} {this.props.product.price}

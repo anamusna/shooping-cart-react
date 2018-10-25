@@ -2,7 +2,7 @@ import React from 'react';
 
 class Avatar extends React.Component {
   render () {
-    return <div><img src={this.props.src} width="20" alt="avatar" /></div>;
+    return <div><img src="/avatar.png" width="30" alt="avatar" /></div>;
   }
 }
 
