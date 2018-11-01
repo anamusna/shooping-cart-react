@@ -1,4 +1,4 @@
-# shopping-cart-example
+# shopping-cart-react
 
 ### Installation
 ```

@@ -1,4 +1,5 @@
 import React from 'react';
+import ErrorMessage from '../shared/ErrorMessage';
 
 class Trial extends React.Component {
 	constructor(props) {
@@ -8,71 +9,109 @@ class Trial extends React.Component {
 			disabled: true,
 			email: '',
 			password: '',
-			password_again: ''
+			password_again: '',
+			errors: ''
 		};
+		this.inputChanged = this.inputChanged.bind(this);
 	}
 
 	inputChanged = (e) => {
 		let obj = {};
 		obj[e.target.name] = e.target.value;
-		this.setState(obj, this.checkValid);
+		this.setState(obj);
 	};
 
 	checkValid = () => {
 		let disabled = true;
+		let errors = '';
+		let errorMessages = {
+			email: 'Invalid email address.',
+			password: 'Invalid password'
+		};
 		let passed = {
 			email: false,
-			password: true,
-			password_again: true
+			password: false
 		};
 
-		if (
-			/^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/.test(
-				this.state.email
-			)
-		) {
-			passed.email = true;
+		if (this.state.email) {
+			if (
+				/^[a-z0-9][a-z0-9-_.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{1,70}(?:\.[a-z]{1,70})?$/.test(
+					this.state.email
+				)
+			) {
+				passed.email = true;
+			} else {
+				errors += errorMessages.email;
+			}
 		}
 
-		if (passed.email && passed.password && passed.password_again) {
+		// we need min. 6 chars
+		if (this.state.password.length > 5 && this.state.password === this.state.password_again) {
+			passed.password = true;
+		}
+
+		if (passed.email && passed.password) {
 			disabled = false;
 		}
 
 		this.setState({
-			disabled: disabled
+			disabled: disabled,
+			errors: errors
 		});
 	};
 
 	render() {
 		return (
 			<div className="text-center">
-				Trial Component
+				<h2>Signup for Trial</h2>
+				<br />
+				{this.state.errors && <ErrorMessage message={this.state.errors} />}
 				<hr />
-				<div>
-					<div>Email Address</div>
-					<input type="text" name="email" value={this.state.email} onChange={this.inputChanged.bind(this)} />
+				<div className="form-group">
+					<label className="small">Email Address</label>
+					<input
+						required
+						className="form-control"
+						name="email"
+						placeholder="Email"
+						type="text"
+						value={this.state.email}
+						onBlur={this.checkValid}
+						onChange={this.inputChanged}
+					/>
 				</div>
-				<div>
-					<div>Password</div>
+				<div className="form-group">
+					<label className="small">Password</label>
 					<input
 						type="password"
 						name="password"
+						required
+						className="form-control"
+						placeholder="Password"
 						value={this.state.password}
-						onChange={this.inputChanged.bind(this)}
+						onChange={this.inputChanged}
 					/>
 				</div>
-				<div>
-					<div>Repeat your password</div>
+				<div className="form-group">
+					<label className="small">Repeat your password</label>
 					<input
 						type="password"
 						name="password_again"
+						required
+						className="form-control"
+						placeholder="Repeat Password"
 						value={this.state.password_again}
-						onChange={this.inputChanged.bind(this)}
+						onChange={this.inputChanged}
 					/>
 				</div>
+				<br />
+				<button className="btn btn-secondary" onClick={this.props.onReset}>
+					Back
+				</button>
+				<button className="btn btn-secondary" disabled={this.state.disabled}>
+					Submit
+				</button>
 				<hr />
-				<button onClick={this.props.onReset}>Back</button>
-				<button disabled={this.state.disabled}>Submit</button>
 			</div>
 		);
 	}
