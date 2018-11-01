@@ -6,10 +6,9 @@ class Trial extends React.Component {
 		super(props);
 
 		this.state = {
-			disabled: true,
-			email: '',
-			password: '',
-			password_again: '',
+			email: 'aaa@aaa.de',
+			password: '123456',
+			password_again: '123456',
 			errors: ''
 		};
 		this.inputChanged = this.inputChanged.bind(this);
@@ -22,7 +21,7 @@ class Trial extends React.Component {
 	};
 
 	checkValid = () => {
-		let disabled = true;
+		let valid = false;
 		let errors = '';
 		let errorMessages = {
 			email: 'Invalid email address.',
@@ -48,67 +47,117 @@ class Trial extends React.Component {
 		// we need min. 6 chars
 		if (this.state.password.length > 5 && this.state.password === this.state.password_again) {
 			passed.password = true;
+		} else {
+			errors += errorMessages.password;
 		}
 
 		if (passed.email && passed.password) {
-			disabled = false;
+			valid = true;
 		}
 
 		this.setState({
-			disabled: disabled,
 			errors: errors
 		});
+
+		return valid;
+	};
+
+	submitDataWithGetRequest = () => {
+		let params =
+			'email=' +
+			encodeURIComponent(this.state.email) +
+			'&password=' +
+			encodeURIComponent(this.state.password) +
+			'&password_again=' +
+			encodeURIComponent(this.state.password_again);
+		let url = 'https://jsonplaceholder.typicode.com/todos/1?' + params;
+
+		fetch(url).then((response) => response.json()).then((json) => {
+			this.processResponse(json);
+		});
+	};
+
+	submitDataWithPostRequest = () => {
+		fetch('https://jsonplaceholder.typicode.com/posts', {
+			method: 'post',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email: this.state.email,
+				password: this.state.password,
+				password_again: this.state.password_again
+			})
+		})
+			.then((response) => response.json())
+			.then((json) => {
+				this.processResponse(json);
+			});
+	};
+
+	processResponse = (json) => {
+		if (json.hasOwnProperty('id')) {
+			// Success
+			document.location.reload();
+		} else {
+			this.setState({
+				loading: false,
+				errors: 'Internal Server Error'
+			});
+		}
+	};
+
+	submitData = () => {
+		if (this.checkValid()) {
+			this.setState({ loading: true });
+			//this.submitDataWithGetRequest();
+			this.submitDataWithPostRequest();
+		}
 	};
 
 	render() {
 		return (
 			<div className="text-center">
-				<h2>Signup for Trial</h2>
+				<h4>SignUp for Trial</h4>
 				<br />
 				{this.state.errors && <ErrorMessage message={this.state.errors} />}
 				<hr />
 				<div className="form-group">
-					<label className="small">Email Address</label>
+					<label>Email Address</label>
 					<input
-						required
-						className="form-control"
-						name="email"
-						placeholder="Email"
 						type="text"
+						name="email"
+						className="form-control"
 						value={this.state.email}
-						onBlur={this.checkValid}
 						onChange={this.inputChanged}
 					/>
 				</div>
 				<div className="form-group">
-					<label className="small">Password</label>
+					<label>Password</label>
 					<input
 						type="password"
 						name="password"
-						required
 						className="form-control"
-						placeholder="Password"
 						value={this.state.password}
 						onChange={this.inputChanged}
 					/>
 				</div>
 				<div className="form-group">
-					<label className="small">Repeat your password</label>
+					<label>Repeat your password</label>
 					<input
 						type="password"
 						name="password_again"
-						required
 						className="form-control"
-						placeholder="Repeat Password"
 						value={this.state.password_again}
 						onChange={this.inputChanged}
 					/>
 				</div>
 				<br />
-				<button className="btn btn-secondary" onClick={this.props.onReset}>
+				<button className="btn btn-sm btn-outline-secondary" onClick={this.props.onReset}>
 					Back
 				</button>
-				<button className="btn btn-secondary" disabled={this.state.disabled}>
+				<button className="btn btn-sm btn-success" onClick={this.submitData}>
 					Submit
 				</button>
 				<hr />

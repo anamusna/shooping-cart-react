@@ -26,15 +26,23 @@ class Pro extends Component {
 		let fieldValidationErrors = this.state.formErrors;
 		let emailValid = this.state.emailValid;
 		let passwordValid = this.state.passwordValid;
+		let repeat_passwordValid = this.state.repeat_passwordValid;
 
 		switch (fieldName) {
 			case 'email':
 				emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
 				fieldValidationErrors.email = emailValid ? '' : ' is invalid!';
+				//console.log(this.state.email, emailValid);
 				break;
 			case 'password':
 				passwordValid = value.length > 6;
 				fieldValidationErrors.password = passwordValid ? '' : ' is too short!';
+				//console.log(value, this.state.password, repeat_passwordValid);
+				break;
+			case 'repeat_password':
+				repeat_passwordValid = value === this.state.password;
+				fieldValidationErrors.repeat_password = repeat_passwordValid ? '' : ' dont match';
+				//console.log(value, this.state.repeat_password, repeat_passwordValid);
 				break;
 			default:
 				break;
@@ -56,14 +64,14 @@ class Pro extends Component {
 	errorClass(error) {
 		return error.length === 0 ? '' : 'has-error';
 	}
-
 	render() {
 		return (
 			<div className="text-center">
-				<h2>Sign up for Pro</h2>
+				<h4>SignUp for Pro</h4>
+				<hr />
 				<FormErrors formErrors={this.state.formErrors} />
 				<div className={`form-group ${this.errorClass(this.state.formErrors.email)}`}>
-					<label htmlFor="email">Email address</label>
+					<label>Email address</label>
 					<input
 						type="email"
 						required
@@ -74,8 +82,8 @@ class Pro extends Component {
 						onChange={this.handleUserInput}
 					/>
 				</div>
-				<div className={`form-group ${this.errorClass(this.state.formErrors.password)}`}>
-					<label htmlFor="password">Password</label>
+				<div id="pass" className={`form-group ${this.errorClass(this.state.formErrors.password)}`}>
+					<label>Password</label>
 					<input
 						type="password"
 						className="form-control"
@@ -87,24 +95,24 @@ class Pro extends Component {
 				</div>
 
 				<div className={`form-group ${this.errorClass(this.state.formErrors.repeat_password)}`}>
-					<label htmlFor="password">Repeat Password</label>
+					<label>Repeat Password</label>
 					<input
 						type="password"
 						className="form-control"
-						name="repeat password"
+						name="repeat_password"
 						placeholder="Repeat Password"
 						value={this.state.repeat_password}
 						onChange={this.handleUserInput}
 					/>
+					<br />
 				</div>
-				<button className="btn btn-secondary" onClick={this.props.onReset}>
+				<button className="btn btn-sm btn-outline-secondary" onClick={this.props.onReset}>
 					Back
 				</button>
-				<button type="submit" className="btn btn-secondary" disabled={!this.state.formValid}>
+				<button type="submit" className="btn btn-sm btn-success" disabled={!this.state.formValid}>
 					submit
 				</button>
 				<hr />
-				<div className="panel panel-default" />
 			</div>
 		);
 	}
