@@ -5,7 +5,7 @@ class Pro extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email: '',
+			email: 'xxx@example.com',
 			password: '',
 			formErrors: { email: '', password: '', repeat_password: '' },
 			emailValid: false,
@@ -32,17 +32,17 @@ class Pro extends Component {
 			case 'email':
 				emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
 				fieldValidationErrors.email = emailValid ? '' : ' is invalid!';
-				//console.log(this.state.email, emailValid);
+				console.log(this.state.email, emailValid);
 				break;
 			case 'password':
 				passwordValid = value.length > 6;
 				fieldValidationErrors.password = passwordValid ? '' : ' is too short!';
-				//console.log(value, this.state.password, repeat_passwordValid);
+				console.log(value, this.state.password, repeat_passwordValid);
 				break;
 			case 'repeat_password':
 				repeat_passwordValid = value === this.state.password;
 				fieldValidationErrors.repeat_password = repeat_passwordValid ? '' : ' dont match';
-				//console.log(value, this.state.repeat_password, repeat_passwordValid);
+				console.log(value, this.state.repeat_password, repeat_passwordValid);
 				break;
 			default:
 				break;

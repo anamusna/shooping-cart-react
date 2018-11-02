@@ -7,8 +7,8 @@ import SignUp from './pages/SignUp';
 const Router = () => (
 	<BrowserRouter>
 		<Switch>
-			<Route exact path="/signup" component={SignUp} />
 			<Route exact path="/" component={Start} />
+			<Route exact path="/signup" component={SignUp} />
 			<Route component={NotFound} />
 		</Switch>
 	</BrowserRouter>
